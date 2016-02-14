@@ -1,0 +1,84 @@
+#parse ("copyright.vm")
+## vars
+#set ($NUMBER = 1)
+#set ($STRING = 2)
+#set ($DATETIME = 3)
+#set ($protoPackageName = "zt.pb.$package")
+#set ($protoNamespace = "zt::pb::$package")
+#set ($filename = "${filename.toLowerCase()}")
+#set ($pbHeaderFile = "${filename}_messages.pb.h")
+#set ($entityHeaderFile = "${filename}_entities.h")
+#set ($daoHeaderFile = "${filename}_daos.h")
+#set ($secFile = "${filename}_soci_entity_conv.h")
+#set ($pbconvHeader = "${filename}_pb_msg_conv.h")
+#set ($upFileName = "${filename.toUpperCase()}" )
+##macros
+#macro(_c_struct_name $table)st_${table.name}_t#end
+#macro(_proto_message_name $table)${table.name}_t#end
+#macro(_dao_name $table)${table.name}_dao#end
+#macro (_c_field_type $column)
+#if ($NUMBER == $column.type)
+#if ($column.scale > 0) ## double
+double#else
+#if ($column.precision > 12)
+#if ($column.signed == true)
+int64_t#else
+uint64_t#end
+#else
+#if ($column.signed == true)
+int32_t#else
+uint32_t#end
+#end
+#end
+#elseif ($DATETIME == $column.type)
+uint64_t#else
+char#end
+#end
+#macro (_soci_field_type $column)
+#if ($NUMBER == $column.type)
+#if ($column.scale > 0) ## double
+double#else
+#if ($column.precision > 12)
+#if ($column.signed == true)
+int64_t#else
+uint64_t#end
+#else
+#if ($column.signed == true)
+int32_t#else
+uint32_t#end
+#end
+#end
+#elseif ($DATETIME == $column.type)
+uint64_t#else
+std::string#end
+#end
+#macro (_c_def_field_size $column)
+#if ($column.type == $STRING)
+[$column.precision + 1]#end#end
+#macro (_c_field_size $column)
+#if ($column.type == $STRING)
+($column.precision + 1)#end#end
+#macro (_c_def_field_length $column)
+#if ($column.type == $STRING)
+[$column.precision]#end#end
+#macro (_c_field_length $column)
+#if ($column.type == $STRING)
+$column.precision#end#end
+#macro (_proto_field_type $column)
+#if ($NUMBER == $column.type)
+#if ($column.scale > 0) ## double
+double#else
+#if ($column.precision > 12)
+#if ($column.signed == true)
+int64#else
+uint64#end
+#else
+#if ($column.signed == true)
+int32#else
+uint32#end
+#end
+#end
+#elseif ($DATETIME == $column.type)
+uint64#else
+string#end
+#end

@@ -1,0 +1,45 @@
+#parse("common.vm")
+\#include <string>
+\#include <string.h>
+\#include <stdlib.h>
+\#include "$pbHeaderFile"
+\#include "$entityHeaderFile"
+\#include "$pbconvHeader"
+
+namespace zt
+{
+namespace ${filename}
+{
+#foreach ($table in $tables)
+	int message_convertor::parse_${table.name.toLowerCase()} (
+		$protoNamespace::#_proto_message_name($table) *message,
+		#_c_struct_name($table) *entity
+		)
+	{
+		memset(entity, 0, sizeof(#_c_struct_name($table)));
+#foreach ($column in $table.columns)
+		if (message->has_${column.name.toLowerCase()}())
+		{
+#if ($column.type == $STRING)
+			strncpy( entity->$column.name, message->${column.name.toLowerCase()}().c_str(), #_c_field_size($column));
+#else
+			entity->${column.name} = message->${column.name.toLowerCase()}();
+#end
+		}
+#end
+		return 0;
+	}
+	int message_convertor::pack_${table.name.toLowerCase()} (
+		#_c_struct_name($table) *entity,
+		$protoNamespace::#_proto_message_name($table) *message
+		)
+	{
+#foreach ($column in $table.columns)
+		message->set_${column.name.toLowerCase()}(entity->${column.name});
+#end
+	}
+
+#end
+}
+}
+

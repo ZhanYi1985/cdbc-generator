@@ -1,0 +1,37 @@
+#parse("common.vm")
+
+#ifndef ZT_${upFileName}_MESSAGE_PARSER_H
+\#define ZT_${upFileName}_MESSAGE_PARSER_H 1
+
+\#include "$pbHeaderFile"
+
+namespace zt
+{
+namespace ${filename}
+{
+
+class message_convertor
+{
+public:
+#foreach ($table in $tables)
+	int parse_${table.name.toLowerCase()} (
+		$protoNamespace::#_proto_message_name($table) *message,
+		#_c_struct_name($table) *entity
+		);
+
+	int pack_${table.name.toLowerCase()} (
+		#_c_struct_name($table) *entity,
+		$protoNamespace::#_proto_message_name($table) *message
+		);
+#end
+};
+
+
+
+
+}
+}
+
+
+
+#endif /* ZT_${upFileName}_MESSAGE_PARSER_H */
