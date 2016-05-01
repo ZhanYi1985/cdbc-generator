@@ -4,6 +4,7 @@
 \#define ZT_${upFileName}_MESSAGE_PARSER_H 1
 
 \#include "$pbHeaderFile"
+\#include "$entityHeaderFile"
 
 namespace zt
 {
