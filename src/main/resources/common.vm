@@ -13,7 +13,7 @@
 #set ($pbconvHeader = "${filename}_pb_msg_conv.h")
 #set ($upFileName = "${filename.toUpperCase()}" )
 ##macros
-#macro(_c_struct_name $table)st_${table.name.toLowerCase()}._t#end
+#macro(_c_struct_name $table)st_${table.name.toLowerCase()}_t#end
 #macro(_proto_message_name $table)${table.name.toLowerCase()}_t#end
 #macro(_dao_name $table)${table.name.toLowerCase()}_dao#end
 #macro (_c_field_type $column)
