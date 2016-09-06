@@ -6,8 +6,7 @@
 \#include "$entityHeaderFile"
 \#include "$pbconvHeader"
 
-namespace zt
-{
+
 namespace ${filename}
 {
 #foreach ($table in $tables)
@@ -40,6 +39,5 @@ namespace ${filename}
 	}
 
 #end
-}
 }
 

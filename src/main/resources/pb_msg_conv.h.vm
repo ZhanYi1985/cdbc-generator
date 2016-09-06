@@ -6,8 +6,6 @@
 \#include "$pbHeaderFile"
 \#include "$entityHeaderFile"
 
-namespace zt
-{
 namespace ${filename}
 {
 
@@ -30,7 +28,6 @@ public:
 
 
 
-}
 }
 
 
