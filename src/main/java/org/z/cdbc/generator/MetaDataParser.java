@@ -21,9 +21,22 @@ public class MetaDataParser {
     private String userName;
     private String password;
     private String driverClassName = MYSQL_DRIVER;
+	private boolean isMySQL;
+
+
+	private String getCatalog(Connection conn) throws SQLException {
+		if (isMySQL) {
+			return null;
+		} else {
+			return conn.getCatalog();
+		}
+	}
 
     public void setDriverClassName(String driverClassName) {
         this.driverClassName = driverClassName;
+		if (MYSQL_DRIVER.equals(driverClassName)) {
+			this.isMySQL = true;
+		}
     }
 
     public MetaDataParser(String url, String un, String pass) {
@@ -37,7 +50,7 @@ public class MetaDataParser {
         Statement stmt = null;
         ResultSet rs = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(driverClassName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             return null;
@@ -46,12 +59,13 @@ public class MetaDataParser {
         try {
             con = DriverManager.getConnection(url,
                     userName, password);
+
             stmt = con.createStatement();
             rs = stmt.executeQuery( "select * from " + tableName + " where 1 = 0 ");
             ResultSetMetaData metaData = rs.getMetaData();
             table = new Table();
 
-            table.setName(tableName.toLowerCase());
+            table.setName(tableName);
             List<Column> columns = new ArrayList<Column>(metaData.getColumnCount());
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 Column c = new Column();
@@ -90,7 +104,7 @@ public class MetaDataParser {
 
         ResultSet pkrs = null;
         ResultSet iRs = null;
-        pkrs = con.getMetaData().getPrimaryKeys(con.getCatalog(), null, table.getName());
+        pkrs = con.getMetaData().getPrimaryKeys(getCatalog(con), null, table.getName());
         List<Column> columns = null;
 
         /*Index pk = new Index();
@@ -109,7 +123,7 @@ public class MetaDataParser {
         }
         indexes.add(pk);*/
 
-        iRs =  con.getMetaData().getIndexInfo(con.getCatalog(), null, table.getName(), true, false);
+        iRs =  con.getMetaData().getIndexInfo(getCatalog(con), null, table.getName(), true, false);
         String indexName = "";
         Index idx = null;
         columns = null;

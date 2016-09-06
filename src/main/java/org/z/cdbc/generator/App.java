@@ -63,6 +63,7 @@ public class App
 		Class.forName(options.getJdbcDriver());
 		MetaDataParser parser = new MetaDataParser(options.getUrl(),
 				options.getUser(), options.getPassword());
+		parser.setDriverClassName(options.getJdbcDriver());
 
 		String [] tablist = options.getTablelist().split(",");
 		for (int i = 0; i < tablist.length; i++) {
