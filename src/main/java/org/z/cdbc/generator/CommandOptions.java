@@ -92,4 +92,15 @@ public class CommandOptions {
         this.password = password;
     }
 
+    public boolean isUseProto2() {
+        return useProto2;
+    }
+
+    public void setUseProto2(boolean useProto2) {
+        this.useProto2 = useProto2;
+    }
+
+    @Parameter(names = "--proto2", description = "Proto2 syntax")
+    private boolean useProto2 = false;
+
 }

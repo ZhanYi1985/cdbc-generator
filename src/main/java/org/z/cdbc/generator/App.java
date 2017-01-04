@@ -40,6 +40,18 @@ public class App
 				"soci_entity_conv.h.vm",
 		};
 
+		final String [] vm_resources_pb3 = {
+				"daos.h.vm",
+				"daos.cc.vm",
+				"entities.h.vm",
+				"messages3.proto.vm",
+				"pb_msg_conv3.cc.vm",
+				"pb_msg_conv.h.vm",
+				"soci_entity_conv.h.vm",
+		};
+
+		String []templateResources = null;
+
 	   CommandOptions options = new CommandOptions();
 		JCommander cmd = new JCommander(options);
 		try {
@@ -75,14 +87,20 @@ public class App
 			}
 		}
 
-
+		ctx.put("proto2", options.isUseProto2());
 		ctx.put("filename", options.getPackageName());
 		ctx.put("tables", tables);
 		ctx.put("package", options.getPackageName());
 
+		if (options.isUseProto2()) {
+			templateResources = vm_resources;
+		} else {
+			templateResources = vm_resources_pb3;
+		}
 
-		for (int i = 0; i < vm_resources.length; i++) {
-			Template template = engine.getTemplate(vm_resources[i]);
+
+		for (int i = 0; i < templateResources.length; i++) {
+			Template template = engine.getTemplate(templateResources[i]);
 
 			OutputStreamWriter writer = new OutputStreamWriter(
 					new FileOutputStream(FileUtil.file(
