@@ -26,7 +26,7 @@ using namespace std;
 using namespace soci;
 
 namespace zt {
-namespace db {
+namespace ${filename} {
 
 #foreach ($table in $tables)
 	// class #_dao_name($table) implements begin.
@@ -74,17 +74,19 @@ namespace db {
 #end
 #end
 		" ) ";
-		_sql << _sqlstr,
+		statement stmt = (_sql.prepare << _sqlstr,
 #foreach ($column in $table.columns)
 #if ($column.autoIncrement == false)
 #if ($velocityHasNext == true)
 		use($column.name),
 #else
-		use($column.name);
+    	use($column.name));
 #end
 #end
 #end
-		return true;
+		stmt.execute(false);
+
+		return stmt.get_affected_rows() == 1;
 	}
 
 #foreach ($index in $table.indexes)
@@ -117,7 +119,7 @@ namespace db {
 #end
 		;
 
-		_sql << _sqlstr
+		statement st = (_sql.prepare << _sqlstr
 #foreach ($column in $table.columns)
 #if ($column.type == $STRING)
 			, into($column.name)
@@ -130,17 +132,21 @@ namespace db {
 #foreach ($column in $index.columns)
 			, use(i_$column.name)
 #end
-		;
+		);
+		st.execute(true);
+		if (st.got_data()) {
 
 #foreach ($column in $table.columns)
 #if ($column.type == $STRING)
-		strncpy( entity->${column.name}, ${column.name}.c_str(), #_c_field_size($column) );
+			strncpy( entity->${column.name}, ${column.name}.c_str(), #_c_field_size($column) );
 #elseif ($column.type == $DATETIME)
-		entity->${column.name} = (#_soci_field_type($column))mktime(&$column.name);
+			entity->${column.name} = (#_soci_field_type($column))mktime(&$column.name);
 #end
 #end
-
-		return true;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	bool #_dao_name($table)::update_by_$index.name ( #_c_struct_name($table) *entity )
@@ -168,16 +174,17 @@ namespace db {
 #end
 		;
 
-		_sql << _sqlstr
+		statement st = (_sql.prepare << _sqlstr
 #foreach ($column in $table.columns)
 			, use($column.name)
 #end
 #foreach ($column in $index.columns)
 			, use($column.name)
 #end
-		;
+		);
+		st.execute(false);
 
-		return true;
+		return st.get_affected_rows() > 0;
 	}
 
 	bool #_dao_name($table)::delete_by_$index.name ( #_c_struct_name($table) *entity )
@@ -191,12 +198,13 @@ namespace db {
 			" and $column.name = :$column.name "
 #end
 		;
-		_sql <<  _sqlstr
+		statement st = (_sql.prepare <<  _sqlstr
 #foreach ($column in $index.columns)
     	, use($column.name)
 #end
-		;
-		return true;
+		);
+		st.execute(false);
+		return st.get_affected_rows() > 0;
 	}
 #end
 

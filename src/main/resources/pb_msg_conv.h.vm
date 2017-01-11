@@ -6,6 +6,7 @@
 \#include "$pbHeaderFile"
 \#include "$entityHeaderFile"
 
+namespace zt {
 namespace ${filename}
 {
 
@@ -30,6 +31,6 @@ public:
 
 }
 
-
+}
 
 #endif /* ZT_${upFileName}_MESSAGE_PARSER_H */

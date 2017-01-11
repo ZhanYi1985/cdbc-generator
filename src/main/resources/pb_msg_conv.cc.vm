@@ -6,7 +6,7 @@
 \#include "$entityHeaderFile"
 \#include "$pbconvHeader"
 
-
+namespace zt {
 namespace ${filename}
 {
 #foreach ($table in $tables)
@@ -36,8 +36,10 @@ namespace ${filename}
 #foreach ($column in $table.columns)
 		message->set_${column.name.toLowerCase()}(entity->${column.name});
 #end
+		return 0;
 	}
 
 #end
 }
 
+}

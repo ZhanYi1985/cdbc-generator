@@ -19,7 +19,7 @@
 \#include <soci.h>
 
 namespace zt {
-namespace db {
+namespace ${filename} {
 
 #foreach ($table in $tables)
 class #_dao_name($table) {
@@ -67,4 +67,5 @@ protected:
 
 }
 }
+
 #endif /* ZT_${upFileName}_DAOS_H */
