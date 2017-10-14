@@ -1,13 +1,13 @@
 node () {
 
-  tool name: 'maven', type: 'maven'
+  def mvnHome = tool name: 'maven', type: 'maven'
   
   stage ('build') {
-    sh 'mvn package'
+    sh '${mvnHome}/mvn package'
   }
   
   stage ('test') {
-    sh 'mvn test'
+    sh '${mvnHome}/mvn test'
   }
   
   stage ('publish') {
