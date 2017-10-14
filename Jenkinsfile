@@ -9,7 +9,7 @@ pipeline {
                 script {
                     def artServer
                     def rtMaven
-                    artServer = Artifactory.getArtifactoryServer('local_artifactory')
+                    artServer = Artifactory.server('local_artifactory')
                     rtMaven = Artifactory.newMavenBuild()
                     rtMaven.resolver server: artServer, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
                     rtMaven.deployer server: artServer, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
