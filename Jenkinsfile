@@ -1,8 +1,11 @@
 pipeline {
     agent any
+    
+    def artServer
+    def rtMaven
+    
     stages {
-        def artServer;
-        def rtMaven;
+        
         
         stage('Build') { 
             steps {
