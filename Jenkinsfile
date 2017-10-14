@@ -1,15 +1,14 @@
 pipeline {
     agent any
     
-    def artServer
-    def rtMaven
+    
     
     stages {
-        
-        
         stage('Build') { 
             steps {
                 script {
+                    def artServer
+                    def rtMaven
                     artServer = Artifactory.getArtifactoryServer()
                     rtMaven = Artifactory.newMavenBuild()
                     rtMaven.resolver server: artServer, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
