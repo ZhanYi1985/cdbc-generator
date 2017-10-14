@@ -1,18 +1,21 @@
-node () {
-
-  def mvnHome
-  
-  stage ('build') {
-    mvnHome = tool 'maven'
-    sh '${mvnHome}/bin/mvn package'
-  }
-  
-  stage ('test') {
-    sh '${mvnHome}/bin/mvn test'
-  }
-  
-  stage ('publish') {
-    echo 'hello'
-  }
-  
+pipeline {
+    agent {
+        docker {
+            image 'maven:3-alpine' 
+            args '-v /root/.m2:/root/.m2' 
+        }
+    }
+    stages {
+        stage('Build') { 
+            steps {
+                sh 'mvn -B -DskipTests package' 
+            }
+        }
+      
+        stage('Publish') { 
+            steps {
+                echo " Done. "
+            }
+        }
+    }
 }
