@@ -1,9 +1,10 @@
 pipeline {
     agent any
     stages {
-        tool name: '', type: 'maven'
+        
         stage('Build') { 
             steps {
+                tool name: 'M3', type: 'maven'
                 sh '${M3}/bin/mvn -B -DskipTests package' 
             }
         }
