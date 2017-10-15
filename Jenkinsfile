@@ -1,6 +1,7 @@
 node () {
     def artServer
     def rtMaven
+    def buildInfo
     stage ('prepare') {
         artServer = Artifactory.server('local_artifactory')
         rtMaven = Artifactory.newMavenBuild()
@@ -13,7 +14,7 @@ node () {
         rtMaven.tool = 'maven'
         rtMaven.deployer.addProperty("status", "in-qa").addProperty("compatibility", "1", "2", "3")
         rtMaven.deployer.deployArtifacts = false
-        def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean package'
+        buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean package'
 
     }
 
