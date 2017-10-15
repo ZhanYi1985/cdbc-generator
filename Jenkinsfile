@@ -23,8 +23,10 @@ pipeline {
       
         stage('Publish') { 
             steps {
-                
-                rtMaven.deployer.deployArtifacts buildInfo 
+                script {
+                    
+                    rtMaven.deployer.deployArtifacts buildInfo 
+                }
                 echo " Done. "
             }
         }
