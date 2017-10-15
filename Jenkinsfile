@@ -14,6 +14,7 @@ pipeline {
                     rtMaven.resolver server: artServer, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
                     rtMaven.deployer server: artServer, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
                     rtMaven.tool = 'maven'
+                    rtMaven.deployer.addProperty("status", "in-qa").addProperty("compatibility", "1", "2", "3")
                     rtMaven.run pom: 'pom.xml', goals: 'clean package'
                 }
             }
