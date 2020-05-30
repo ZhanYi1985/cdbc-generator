@@ -15,6 +15,7 @@ node () {
         rtMaven.deployer.addProperty("status", "in-qa").addProperty("compatibility", "1", "2", "3")
         buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean package'
 
+
     }
 
     stage('Publish') { 
